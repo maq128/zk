@@ -1,0 +1,114 @@
+<html>
+<head>
+<title>字卡</title>
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<style type="text/css">
+body {
+	margin: 0px;
+	padding: 0px;
+	background-color: white;
+	color: black;
+}
+
+.desc {
+	font-weight: bold;
+	color: #E00000;
+	margin: 10px;
+}
+
+a {
+	display: block;
+	margin: 10px;
+}
+
+.card {
+	float: left;
+	margin: 5px 10px;
+}
+
+.card .py {
+	line-height: 30px;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 26px;
+	font-weight: bold;
+	font-family: "宋体";
+	x-background-color: #eee;
+}
+
+.card .hz {
+	width: 190px;
+	line-height: 190px;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 160px;
+	font-family: "楷体_GB2312";
+	border: 2px dashed black;
+	background: url(bg_2.gif) no-repeat center center;
+}
+</style>
+<script>
+var courses = {
+	"第3课-1": "旅lv3 蒲pu2 降jia4ng 娃wa2 乘che2ng 纷fe1n 苍ca1ng 刺ci4 铠ka3i 洼wa1 豌wa1n 荚jia2",
+	"第3课-2": "啪pa1 炸cha4 蹦be4ng 信xi4n 察cha2 识shi2"
+};
+var pys = {
+	a: 'āáǎà',
+	o: 'ōóǒò',
+	e: 'ēéěè',
+	i: 'īíǐì',
+	u: 'ūúǔù',
+	v: 'ǖǘǚǜü',
+	g: 'ɡ'
+};
+
+function oneCard( py, hz )
+{
+	var card = document.createElement( 'div' );
+	card.className = 'card';
+	card.innerHTML = '<table><tr><td class="py">' + py + '</td></tr><tr><td class="hz">' + hz + '</td></tr></table>';
+	document.body.appendChild( card );
+}
+
+function onLoad()
+{
+	var qs = window.location.search.substr( 1 );
+	if ( qs.length == 0 ) {
+		var desc = document.createElement( 'p' );
+		desc.className = 'desc';
+		desc.innerHTML = '为达到最佳显示、打印效果，建议使用 Google Chrome 浏览器。';
+		document.body.appendChild( desc );
+
+		desc = document.createElement( 'p' );
+		desc.className = 'desc';
+		desc.innerHTML = '打印时建议开启“背景颜色和图片”选项。';
+		document.body.appendChild( desc );
+
+		for ( var course in courses ) {
+			var chars = courses[ course ];
+			var anchor = document.createElement( 'a' );
+			anchor.target = '_blank';
+			anchor.href = '?' + encodeURIComponent( chars );
+			anchor.innerText = course + '：' + chars;
+			document.body.appendChild( anchor );
+		}
+		return;
+	}
+
+	qs = decodeURIComponent( qs );
+	var list = qs.split( ' ' );
+	for ( var i = 0; i < list.length; i ++ ) {
+		var one = list[i];
+		var py = one.substr( 1 ).replace( /([aoeiuvg])(\d)|(g)/g , function( m, a, t, g ) {
+			if ( g ) return pys[g];
+			return pys[a].charAt( t - 1 );
+		});;
+		var hz = one.substr( 0, 1 );
+		oneCard( py, hz );
+	}
+}
+</script>
+</head>
+<body onload="onLoad()">
+</body>
+</html>
