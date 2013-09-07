@@ -10,15 +10,30 @@ body {
 	color: black;
 }
 
-.desc {
-	font-weight: bold;
-	color: #E00000;
+h1, p {
 	margin: 10px;
 }
 
 a {
-	display: block;
-	margin: 10px;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+
+fieldset {
+	float: left;
+	font-size: 12px;
+	margin: 0px 10px 10px;
+}
+
+.desc {
+	font-weight: bold;
+	color: #E00000;
+}
+
+.list {
+	clear: both;
 }
 
 .card {
@@ -33,7 +48,6 @@ a {
 	font-size: 26px;
 	font-weight: bold;
 	font-family: "宋体";
-	x-background-color: #eee;
 }
 
 .card .hz {
@@ -47,10 +61,10 @@ a {
 	background: url(bg_2.gif) no-repeat center center;
 }
 </style>
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script>
 var courses = {
-	"第3课-1": "旅lv3 蒲pu2 降jia4ng 娃wa2 乘che2ng 纷fe1n 苍ca1ng 刺ci4 铠ka3i 洼wa1 豌wa1n 荚jia2",
-	"第3课-2": "啪pa1 炸cha4 蹦be4ng 信xi4n 察cha2 识shi2",
+	"第3课": "旅lv3 蒲pu2 降jia4ng 娃wa2 乘che2ng 纷fe1n 苍ca1ng 刺ci4 铠ka3i 洼wa1 豌wa1n 荚jia2 啪pa1 炸cha4 蹦be4ng 信xi4n 察cha2 识shi2",
 	"第4课": "刘liu2 菊ju2 残ca2n 君ju1n 橙che2ng 橘ju2 径ji4ng 斜xie2 枫fe1ng 于yu2",
 	"语文园地一": "交jia1o 支zhi1 龙lo2ng 求qiu2 凡fa2n 利li4",
 	"识字2": "棋qi2 弹da4n 钢ga1ng 琴qi2n 胡hu2 戏xi4 喂we4i 鸽ge1 养ya3ng 航ha2ng 模mo2",
@@ -69,39 +83,127 @@ var pys = {
 	g: 'ɡ'
 };
 
+function setCookie( name, value )
+{
+	var exp = new Date();
+	exp.setTime( exp.getTime() + 30*24*60*60*1000 );
+	document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+}
+
+function getCookie( name )
+{
+	var arr = document.cookie.match( new RegExp( "(^| )" + name + "=([^;]*)(;|$)" ) );
+	if ( arr != null ) return parseInt( unescape( arr[2] ) );
+	return null;
+}
+
 function oneCard( py, hz )
 {
-	var card = document.createElement( 'div' );
-	card.className = 'card';
-	card.innerHTML = '<table><tr><td class="py">' + py + '</td></tr><tr><td class="hz">' + hz + '</td></tr></table>';
-	document.body.appendChild( card );
+	$('<div></div>')
+		.addClass( 'card' )
+		.append( '<table><tr><td class="py">' + py + '</td></tr><tr><td class="hz">' + hz + '</td></tr></table>' )
+		.appendTo( document.body );
+}
+
+function showList( sz, combin )
+{
+	// 每张 A4 纸能打印的字卡数量
+	var num = 12;
+	switch ( sz ) {
+	case 2: num = 8; break;
+	case 3: num = 6; break;
+	}
+
+	var new_courses = { };
+	if ( combin == 1 ) {
+		for ( var course in courses ) {
+			var chars = courses[ course ];
+			var arr = chars.split( ' ' );
+			if ( arr.length <= num ) {
+				new_courses[ course ] = chars;
+			} else {
+				var part = 1;
+				while ( arr.length > 0 ) {
+					chars = arr.splice( 0, num ).join( ' ' );
+					new_courses[ course + '/' + (part++) ] = chars;
+				}
+			}
+		}
+	} else {
+		var name_buf = [];
+		var char_buf = [];
+
+		for ( var course in courses ) {
+			var chars = courses[ course ];
+			name_buf.push( course );
+			char_buf = char_buf.concat( chars.split( ' ' ) );
+			var seq = 0;
+			while ( char_buf.length > num ) {
+				var name = name_buf.join('/');
+				for ( var i = 0; i < seq; i ++ ) {
+					name += '.';
+				}
+				new_courses[ name ] = char_buf.splice( 0, num ).join( ' ' );
+				name_buf = [ course ];
+				seq ++;
+			}
+		}
+
+		if ( char_buf.length > 0 ) {
+			new_courses[ name_buf.join('/') ] = char_buf.join( ' ' );
+		}
+	}
+
+	var divList = $( '.list' ).empty();
+	for ( var course in new_courses ) {
+		var chars = new_courses[ course ];
+		$('<p><a target="_blank" href="?' + encodeURIComponent( chars ) + '">【' + course + '】' + chars + '</a></p>')
+			.appendTo( divList );
+	}
 }
 
 function onLoad()
 {
+	// 根据 cookie 的记录设置选项
+	var sz = getCookie( 'sz' );
+	if ( sz != 2 && sz != 3 ) sz = 1;
+	var combin = getCookie( 'combin' );
+	if ( combin != 2 ) combin = 1;
+	var bg = getCookie( 'bg' );
+	if ( bg != 2 ) bg = 1;
+
 	var qs = window.location.search.substr( 1 );
 	if ( qs.length == 0 ) {
-		var desc = document.createElement( 'p' );
-		desc.className = 'desc';
-		desc.innerHTML = '为达到最佳显示、打印效果，建议使用 Google Chrome 浏览器。';
-		document.body.appendChild( desc );
+		// 设置字卡尺寸选项按钮，并监听修改操作
+		$( '#sz-' + sz ).get(0).checked = true;
+		$( 'input[name=sz]' ).click(function( evt ) {
+			sz = parseInt( evt.currentTarget.value );
+			setCookie( 'sz', sz );
+			showList( sz, combin );
+		});
 
-		desc = document.createElement( 'p' );
-		desc.className = 'desc';
-		desc.innerHTML = '打印时建议开启“背景颜色和图片”选项。';
-		document.body.appendChild( desc );
+		// 设置组合模式选项按钮，并监听修改操作
+		$( '#combin-' + combin ).get(0).checked = true;
+		$( 'input[name=combin]' ).click(function( evt ) {
+			combin = parseInt( evt.currentTarget.value );
+			setCookie( 'combin', combin );
+			showList( sz, combin );
+		});
 
-		for ( var course in courses ) {
-			var chars = courses[ course ];
-			var anchor = document.createElement( 'a' );
-			anchor.target = '_blank';
-			anchor.href = '?' + encodeURIComponent( chars );
-			anchor.innerText = course + '：' + chars;
-			document.body.appendChild( anchor );
-		}
+		// 设置卡片格式选项按钮，并监听修改操作
+		$( '#bg-' + bg ).get(0).checked = true;
+		$( 'input[name=bg]' ).click(function( evt ) {
+			bg = parseInt( evt.currentTarget.value );
+			setCookie( 'bg', bg );
+		});
+
+		// 显示首页的列表
+		showList( sz, combin );
 		return;
 	}
 
+	// 清空页面，生成每个字卡
+	$( document.body ).empty();
 	qs = decodeURIComponent( qs );
 	var list = qs.split( ' ' );
 	for ( var i = 0; i < list.length; i ++ ) {
@@ -113,9 +215,56 @@ function onLoad()
 		var hz = one.substr( 0, 1 );
 		oneCard( py, hz );
 	}
+
+	// 设置字卡尺寸
+	switch ( sz ) {
+	case 2:
+		$('.card .py')
+			.height( 40 )
+			.css( 'line-height', '40px' )
+			.css( 'font-size', '36px' );
+		$('.card .hz')
+			.width( 210 )
+			.height( 210 )
+			.css( 'line-height', '190px' )
+			.css( 'font-size', '190px' );
+		break;
+	case 3:
+		$('.card .py')
+			.height( 40 )
+			.css( 'line-height', '40px' )
+			.css( 'font-size', '36px' );
+		$('.card .hz')
+			.width( 260 )
+			.height( 260 )
+			.css( 'line-height', '230px' )
+			.css( 'font-size', '230px' );
+		break;
+	}
+
+	$('.card .hz')
+		.css( 'background-image', bg == 1 ? 'url(bg_2.gif)' : 'url(bg_4.gif)' );
 }
 </script>
 </head>
 <body onload="onLoad()">
+<p class="desc">为获得最佳显示、打印效果，建议使用 Google Chrome 浏览器。</p>
+<p class="desc">打印时建议开启“背景颜色和图片”选项。</p>
+<p class="desc">内容持续更新中……</p>
+<h1>人教版二年级语文上册 识字卡片（适合A4纸打印）</h1>
+<fieldset><legend>卡片尺寸</legend>
+	<input type="radio" id="sz-1" name="sz" value="1" /><label for="sz-1">小（竖版3×4）</label>
+	<input type="radio" id="sz-2" name="sz" value="2" /><label for="sz-2">中（横版4×2）</label>
+	<input type="radio" id="sz-3" name="sz" value="3" /><label for="sz-3">大（2×3）</label>
+</fieldset>
+<fieldset><legend>组合模式</legend>
+	<input type="radio" id="combin-1" name="combin" value="1" /><label for="combin-1">分课</label>
+	<input type="radio" id="combin-2" name="combin" value="2" /><label for="combin-2">拼合（省纸）</label>
+</fieldset>
+<fieldset><legend>卡片格式</legend>
+	<input type="radio" id="bg-1" name="bg" value="1" /><label for="bg-1">田字格</label>
+	<input type="radio" id="bg-2" name="bg" value="2" /><label for="bg-2">米字格</label>
+</fieldset>
+<div class="list"></div>
 </body>
 </html>
