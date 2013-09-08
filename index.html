@@ -36,9 +36,13 @@ fieldset {
 	clear: both;
 }
 
+.page {
+	border-collapse: collapse;
+}
+
 .card {
-	float: left;
-	margin: 5px 10px;
+	padding: 5px 10px;
+	border: 1px dotted gray;
 }
 
 .card .py {
@@ -64,14 +68,30 @@ fieldset {
 <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script>
 var courses = {
-	"第3课": "旅lv3 蒲pu2 降jia4ng 娃wa2 乘che2ng 纷fe1n 苍ca1ng 刺ci4 铠ka3i 洼wa1 豌wa1n 荚jia2 啪pa1 炸cha4 蹦be4ng 信xi4n 察cha2 识shi2",
+	"识字1": "宜yi2 层ce2ng 尽ji4n 染ra3n 叠die2 翠cui4 爽shua3ng 壮zhua4ng 谷gu3 登de1ng 华hua2",
+	"第1课": "图tu2 梨li2 笼lo2ng 浪la4ng 粱liang2 燃ra2n 勤qi2n 劳la2o",
+	"第2课": "区qu1 尤yo2u 其qi2 仙xia1n 盘pa2n 峰fe1ng 胳ge1 膊bo2 巨ju4 当da1ng 脖bo2 著zhu4 形xi2ng 状zhua4ng",
+	"第3课": "旅lv3 蒲pu2 降jia4ng 娃wa2 纷fe1n 苍ca1ng 洼wa1 啪pa1 炸cha4 蹦be4ng 察cha2 识shi2",
 	"第4课": "刘liu2 菊ju2 残ca2n 君ju1n 橙che2ng 橘ju2 径ji4ng 斜xie2 枫fe1ng 于yu2",
 	"语文园地一": "交jia1o 支zhi1 龙lo2ng 求qiu2 凡fa2n 利li4",
 	"识字2": "棋qi2 弹da4n 钢ga1ng 琴qi2n 胡hu2 戏xi4 喂we4i 鸽ge1 养ya3ng 航ha2ng 模mo2",
 	"第5课": "株zhu1 踮dia3n 院yua4n 除chu2 疲pi2 倦jua4n 牵qia1n 困ku4n",
 	"第6课": "委we3i 补bu3 室shi4 宁ni2ng 愣le4ng 切qie1 集ji2 掌zha3ng",
 	"第7课": "钟zho1ng 零li2ng 闹na4o 哈ha1 欠qia4n 迟chi2 叹ta4n 决jue2 悔hui3",
-	"第8课": "计ji4 算sua4n 冒ma4o 览la3n 馆gua3n 紧ji3n 怦pe1ng 握wo4 容ro2ng 普pu3 奋fe4n 灿ca4n 烂la4n"
+	"第8课": "计ji4 算sua4n 冒ma4o 览la3n 馆gua3n 紧ji3n 怦pe1ng 握wo4 容ro2ng 普pu3 奋fe4n 灿ca4n 烂la4n",
+	"语文园地二": "柏ba3i 纪ji4 纺fa3ng 织zhi1 优yo1u 胜she4ng 湾wa1n 粒li4",
+	"识字3": "神she2n 州zho1u 川chua1n 涌yo3ng 岛da3o 隔ge2 峡xia2 与yu3 陆lu4 民mi2n 族zu2",
+	"第9课": "庆qi4ng 献xia4n 帜zhi4 洁jie2 奏zo4u 曲qu3 亿yi4",
+	"第10课": "央ya1ng 瓦wa3 庄zhua1ng 严ya2n 阔kuo4 碑be1i 周zho1u 似si4 拼pi1n 案a4n 坛ta2n 迹ji4 厦sha4",
+	"第11课": "讯xu4n 传chua2n 约yue1 聚ju4 挥hui1 锣luo2 呼hu1 击ji1 拥yo1ng 抱ba4o 泪lei4 泽ze2 克ke4 扬ya2ng",
+	"第12课": "省she3ng 店dia4n 橱chu2 指zhi3 接jie1 讲jia3ng 铺pu1 毯ta3n 银yi2n 仗zha4ng",
+	"语文园地三": "退tui4 危we1i 险xia3n 买ma3i 卖ma4i 反fa3n 杂za2 简jia3n 单da1n",
+	"识字4": "寸cu4n 益yi4 彰zha1ng 豹ba4o 障zha4ng 泰ta4i 徒tu2 功go1ng 渠qu2",
+	"第13课": "沿ya2n 际ji4 信xi4n",
+	"第14课": "葫hu2 芦lu2 藤te2ng 哇wa1 盯di1ng 邻li2n",
+	"第15课": "枣za3o 浅qia3n 秃tu1 忍re3n 呗bei 虽sui1 乘che2ng 思si1",
+	"第16课": "抽cho1u 续xu4 吸xi1 极ji2 夫fu1 汗ha4n 驶shi3 示shi4 筝zhe1ng 踪zo1ng 伤sha1ng 责ze2",
+	"第17课": "酸sua1n 葡pu2 萄ta2o 狐hu2 狸li2 串chua4n 迫po4 待da4i 硬yi4ng"
 };
 var pys = {
 	a: 'āáǎà',
@@ -97,12 +117,10 @@ function getCookie( name )
 	return null;
 }
 
-function oneCard( py, hz )
+function makeCard( py, hz )
 {
-	$('<div></div>')
-		.addClass( 'card' )
-		.append( '<table><tr><td class="py">' + py + '</td></tr><tr><td class="hz">' + hz + '</td></tr></table>' )
-		.appendTo( document.body );
+	return $('<td class="card"></td>')
+		.append( '<table><tr><td class="py">' + py + '</td></tr><tr><td class="hz">' + hz + '</td></tr></table>' );
 }
 
 function showList( sz, combin )
@@ -138,13 +156,13 @@ function showList( sz, combin )
 			name_buf.push( course );
 			char_buf = char_buf.concat( chars.split( ' ' ) );
 			var seq = 0;
-			while ( char_buf.length > num ) {
+			while ( char_buf.length >= num ) {
 				var name = name_buf.join('/');
 				for ( var i = 0; i < seq; i ++ ) {
 					name += '.';
 				}
 				new_courses[ name ] = char_buf.splice( 0, num ).join( ' ' );
-				name_buf = [ course ];
+				name_buf = char_buf.length > 0 ? [ course ] : [];
 				seq ++;
 			}
 		}
@@ -206,6 +224,10 @@ function onLoad()
 	$( document.body ).empty();
 	qs = decodeURIComponent( qs );
 	var list = qs.split( ' ' );
+	var table = $('<table class="page"></table>').appendTo( document.body );
+	var tr = null;
+	var num = 3; // 每行能显示的卡片个数
+	if ( sz == 2 ) num = 4;
 	for ( var i = 0; i < list.length; i ++ ) {
 		var one = list[i];
 		var py = one.substr( 1 ).replace( /([aoeiuvg])(\d)|(g)/g , function( m, a, t, g ) {
@@ -213,7 +235,11 @@ function onLoad()
 			return pys[a].charAt( t - 1 );
 		});;
 		var hz = one.substr( 0, 1 );
-		oneCard( py, hz );
+
+		if ( i % num == 0 ) {
+			tr = $('<tr></tr>').appendTo( table );
+		}
+		tr.append( makeCard( py, hz ) );
 	}
 
 	// 设置字卡尺寸
@@ -235,10 +261,10 @@ function onLoad()
 			.css( 'line-height', '40px' )
 			.css( 'font-size', '36px' );
 		$('.card .hz')
-			.width( 260 )
-			.height( 260 )
-			.css( 'line-height', '230px' )
-			.css( 'font-size', '230px' );
+			.width( 270 )
+			.height( 270 )
+			.css( 'line-height', '240px' )
+			.css( 'font-size', '240px' );
 		break;
 	}
 
@@ -255,7 +281,7 @@ function onLoad()
 <fieldset><legend>卡片尺寸</legend>
 	<input type="radio" id="sz-1" name="sz" value="1" /><label for="sz-1">小（竖版3×4）</label>
 	<input type="radio" id="sz-2" name="sz" value="2" /><label for="sz-2">中（横版4×2）</label>
-	<input type="radio" id="sz-3" name="sz" value="3" /><label for="sz-3">大（2×3）</label>
+	<input type="radio" id="sz-3" name="sz" value="3" /><label for="sz-3">大（横版3×2）</label>
 </fieldset>
 <fieldset><legend>组合模式</legend>
 	<input type="radio" id="combin-1" name="combin" value="1" /><label for="combin-1">分课</label>
