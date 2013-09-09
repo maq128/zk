@@ -32,8 +32,10 @@ fieldset {
 	color: #E00000;
 }
 
-.list {
+#skip {
 	clear: both;
+	margin: 5px 10px;
+	font-size: 12px;
 }
 
 .card {
@@ -61,7 +63,7 @@ fieldset {
 	background: url(bg_2.gif) no-repeat center center;
 }
 </style>
-<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="jquery-1.10.2.min.js"></script>
 <script>
 var courses = {
 	"第3课": "旅lv3 蒲pu2 降jia4ng 娃wa2 乘che2ng 纷fe1n 苍ca1ng 刺ci4 铠ka3i 洼wa1 豌wa1n 荚jia2 啪pa1 炸cha4 蹦be4ng 信xi4n 察cha2 识shi2",
@@ -105,7 +107,7 @@ function oneCard( py, hz )
 		.appendTo( document.body );
 }
 
-function showList( sz, combin )
+function showList( sz, combin, skipTo )
 {
 	// 每张 A4 纸能打印的字卡数量
 	var num = 12;
@@ -117,6 +119,9 @@ function showList( sz, combin )
 	var new_courses = { };
 	if ( combin == 1 ) {
 		for ( var course in courses ) {
+			if ( skipTo && course != skipTo ) continue;
+			skipTo = null;
+
 			var chars = courses[ course ];
 			var arr = chars.split( ' ' );
 			if ( arr.length <= num ) {
@@ -134,6 +139,9 @@ function showList( sz, combin )
 		var char_buf = [];
 
 		for ( var course in courses ) {
+			if ( skipTo && course != skipTo ) continue;
+			skipTo = null;
+
 			var chars = courses[ course ];
 			name_buf.push( course );
 			char_buf = char_buf.concat( chars.split( ' ' ) );
@@ -154,7 +162,7 @@ function showList( sz, combin )
 		}
 	}
 
-	var divList = $( '.list' ).empty();
+	var divList = $( '#list' ).empty();
 	for ( var course in new_courses ) {
 		var chars = new_courses[ course ];
 		$('<p><a target="_blank" href="?' + encodeURIComponent( chars ) + '">【' + course + '】' + chars + '</a></p>')
@@ -171,34 +179,50 @@ function onLoad()
 	if ( combin != 2 ) combin = 1;
 	var bg = getCookie( 'bg' );
 	if ( bg != 2 ) bg = 1;
+	var skipTo = null;
 
 	var qs = window.location.search.substr( 1 );
 	if ( qs.length == 0 ) {
 		// 设置字卡尺寸选项按钮，并监听修改操作
 		$( '#sz-' + sz ).get(0).checked = true;
-		$( 'input[name=sz]' ).click(function( evt ) {
+		$( 'input[name=sz]' ).click( function( evt ) {
 			sz = parseInt( evt.currentTarget.value );
 			setCookie( 'sz', sz );
-			showList( sz, combin );
+			showList( sz, combin, skipTo );
 		});
 
 		// 设置组合模式选项按钮，并监听修改操作
 		$( '#combin-' + combin ).get(0).checked = true;
-		$( 'input[name=combin]' ).click(function( evt ) {
+		$( 'input[name=combin]' ).click( function( evt ) {
 			combin = parseInt( evt.currentTarget.value );
 			setCookie( 'combin', combin );
-			showList( sz, combin );
+			showList( sz, combin, skipTo );
 		});
 
 		// 设置卡片格式选项按钮，并监听修改操作
 		$( '#bg-' + bg ).get(0).checked = true;
-		$( 'input[name=bg]' ).click(function( evt ) {
+		$( 'input[name=bg]' ).click( function( evt ) {
 			bg = parseInt( evt.currentTarget.value );
 			setCookie( 'bg', bg );
 		});
 
+		// 设置“跳过”选项，并监听修改操作
+		var selSkipTo = $( '#skip-to' );
+		for ( var course in courses ) {
+			$('<option value="' + course + '">' + course + '</option>')
+				.appendTo( selSkipTo );
+			if ( ! skipTo ) {
+				skipTo = course;
+				selSkipTo.val( skipTo );
+			}
+		}
+		selSkipTo.change( function( evt ) {
+			skipTo = selSkipTo.val();
+			showList( sz, combin, skipTo );
+		});
+
 		// 显示首页的列表
-		showList( sz, combin );
+		showList( sz, combin, skipTo );
 		return;
 	}
 
@@ -265,6 +289,12 @@ function onLoad()
 	<input type="radio" id="bg-1" name="bg" value="1" /><label for="bg-1">田字格</label>
 	<input type="radio" id="bg-2" name="bg" value="2" /><label for="bg-2">米字格</label>
 </fieldset>
-<div class="list"></div>
+<div id="skip">
+	从
+	<select id="skip-to">
+	</select>
+	开始
+</div>
+<div id="list"></div>
 </body>
 </html>
