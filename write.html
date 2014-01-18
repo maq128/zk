@@ -1,0 +1,137 @@
+<html>
+<head>
+<title>会写字（二上）</title>
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<style type="text/css">
+body {
+	margin: 0px;
+	padding: 0px;
+	background-color: white;
+	color: black;
+}
+
+.course {
+	page-break-inside:avoid;
+}
+
+.course .title {
+	font-size: 18px;
+	font-family: "宋体";
+	margin-top: 10px;
+}
+
+.chars:after {
+	content: '';
+	display: block;
+	clear: both;
+}
+
+.char {
+	display: block;
+	position: relative;
+	float: left;
+	width: 40px;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	font-size: 30px;
+	font-family: "楷体", "楷体_GB2312";
+	border: 1px dashed black;
+	margin: 3px;
+}
+.char:before {
+	content: '';
+	display: block;
+	position: absolute;
+	top: 50%;
+	left: 0px;
+	width: 100%;
+	border-top: 1px dashed black;
+}
+.char:after {
+	content: '';
+	display: block;
+	position: absolute;
+	top: 0px;
+	left: 50%;
+	height: 100%;
+	border-left: 1px dashed black;
+}
+
+</style>
+<script src="jquery-1.10.2.min.js"></script>
+<script>
+var courses = {
+	'《识字1》': '宜实色华谷金尽层丰壮',
+	'1《秋天的图画》': '波浪灯作字苹丽劳',
+	'2《黄山奇石》': '尤其区巨它安块站',
+	'3《植物妈妈有办法》': '已甲豆识纷经如好娃洼',
+	'4《古诗两首》': '于首枝枫记',
+	'《识字2》': '胡戏棋钢观弹琴养',
+	'5《一株紫丁香》': '休伸甜歌院除息您牵困',
+	'6《我选我》': '员青宁室样校切教响班',
+	'7《一分钟》': '欠元包钟叹哈迟闹',
+	'8《难忘的一天》': '及身仔细次外计怦礼加',
+	'《识字3》': '夕与川州台争民族',
+	'9《欢庆》': '亿洁欢祖旗帜庆曲',
+	'10《北京》': '央交市旁优阴坛城国图',
+	'11《我们成功了》': '申匹互京泪洋拥抱相扬',
+	'12《看雪》': '讲打指接惊故候奇',
+	'《识字4》': '寸落补拔功助取所',
+	'13《坐井观天》': '信沿抬际蛙错答还',
+	'14《我要的是葫芦》': '言每治棵挂怪慢',
+	'15《小柳树和小枣树》': '怎思穿弯比服浅漂',
+	'16《风娃娃》': '夫表示号汗伤吸极',
+	'17《酸的和甜的》': '串兔告诉狸猴颗',
+	'《识字5》': '斤折挑根独满容易',
+	'18《称赞》': '采背板椅但傍清消',
+	'19《蓝色的树叶》': '由术吐注课铅笔桌景拿',
+	'20《纸船和风筝》': '坏松扎抓祝福句幸',
+	'21《从现在开始》': '之令布直当第现期轮路',
+	'《识字6》': '丑永饥饱温暖贫富',
+	'22《窗前的气球》': '户亚角周床病始张',
+	'23《假如》': '寻哭良食双体操场',
+	'24《日记两则》': '份粉昨晴姑娘妹读',
+	'25《古诗两首》': '舟乘音客何汪',
+	'《识字7》': '丛牢拍护保物鸡猫',
+	'26《“红领巾”真好》': '羽领捉理跃蹦灵晨',
+	'27《清澈的湖水》': '失觉扔掉眼睛纸船',
+	'28《浅水洼里的小鱼》': '久乎至死腰捡粒被',
+	'29《父亲和鸟》': '并夜喜重味轻刻群',
+	'《识字8》': '卫运宇宙航舰',
+	'30《我是什么》': '冲晒池浮灾害黑器',
+	'31《回声》': '岸纹洞影倒游圆围',
+	'32《太空生活趣事多》': '杯件住须能飘必事',
+	'33《活化石》': '历史灭克化代孙植',
+	'34《农业的变化真大》': '厂产介农科技纺织'
+};
+
+function makeCourse(parent, course)
+{
+	parent = $('<div class="course"></div>').appendTo(parent);
+	$('<div class="title">' + course + '</div>').appendTo(parent);
+	return $('<div class="chars"></div>').appendTo(parent);
+}
+function makeChar(parent, c)
+{
+	$('<span class="char">' + c + '</span>').appendTo(parent);
+}
+
+function onLoad()
+{
+	var divList = $('#list').empty();
+	for (var course in courses) {
+		var chars = courses[ course ].split('');
+		divCourse = makeCourse(divList, course);
+		for (var i=0; i < chars.length; i++) {
+			makeChar(divCourse, chars[i]);
+		}
+	}
+}
+</script>
+</head>
+<body onload="onLoad()">
+<h1>人教版二年级语文上册 会写字</h1>
+<div id="list"></div>
+</body>
+</html>
