@@ -1,7 +1,7 @@
 <html>
 <head>
-<title>×Ö¿¨</title>
-<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<title>å­—å¡</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <style type="text/css">
 body {
 	margin: 0px;
@@ -53,7 +53,7 @@ fieldset {
 	vertical-align: middle;
 	font-size: 26px;
 	font-weight: bold;
-	font-family: "ËÎÌå";
+	font-family: "å®‹ä½“";
 }
 
 .card .hz {
@@ -62,7 +62,7 @@ fieldset {
 	text-align: center;
 	vertical-align: middle;
 	font-size: 160px;
-	font-family: "¿¬Ìå", "¿¬Ìå_GB2312";
+	font-family: "æ¥·ä½“", "æ¥·ä½“_GB2312";
 	border: 2px dashed black;
 	background: url(bg_2.gif) no-repeat center center;
 }
@@ -74,290 +74,55 @@ fieldset {
 	font-size: 12px;
 }
 </style>
-<script src="jquery-1.10.2.min.js"></script>
+<script src="js/jquery-1.10.2.min.js"></script>
+
+<script src="js/data.js"></script>
+<script src="js/szcard.js"></script>
+<script src="js/papaparse.js"></script>
+
 <script>
-var courses = {
-	"Ê¶×Ö1": "ÒËyi2 ²ãce2ng ¾¡ji4n È¾ra3n µşdie2 ´äcui4 Ë¬shua3ng ×³zhua4ng ¹Ègu3 µÇde1ng »ªhua2",
-	"µÚ1¿Î": "Í¼tu2 Àæli2 Áılo2ng ÀËla4ng Á»liang2 È¼ra2n ÇÚqi2n ÀÍla2o",
-	"µÚ2¿Î": "Çøqu1 ÓÈyo2u Æäqi2 ÏÉxia1n ÅÌpa2n ·åfe1ng ¸ìge1 ²²bo2 ¾Şju4 µ±da1ng ²±bo2 Öøzhu4 ĞÎxi2ng ×´zhua4ng",
-	"µÚ3¿Î": "ÂÃlv3 ÆÑpu2 ½µjia4ng ÍŞwa2 ·×fe1n ²Ôca1ng Íİwa1 Å¾pa1 Õ¨zha4 ±Äbe4ng ²ìcha2 Ê¶shi2",
-	"µÚ4¿Î": "Áõliu2 ¾Õju2 ²Ğca2n ¾ıju1n ³Èche2ng éÙju2 ¾¶ji4ng Ğ±xie2 ·ãfe1ng ÓÚyu2",
-	"ÓïÎÄÔ°µØÒ»": "½»jia1o Ö§zhi1 Áúlo2ng Çóqiu2 ·²fa2n Àûli4",
-	"Ê¶×Ö2": "Æåqi2 µ¯da4n ¸Öga1ng ÇÙqi2n ºúhu2 Ï·xi4 Î¹we4i ¸ëge1 Ñøya3ng º½ha2ng Ä£mo2",
-	"µÚ5¿Î": "Öêzhu1 õÚdia3n Ôºyua4n ³ıchu2 Æ£pi2 ¾ëjua4n Ç£qia1n À§ku4n",
-	"µÚ6¿Î": "Î¯we3i ²¹bu3 ÊÒshi4 Äşni2ng ã¶le4ng ÇĞqie1 ¼¯ji2 ÕÆzha3ng",
-	"µÚ7¿Î": "ÖÓzho1ng Áãli2ng ÄÖna4o ¹şha1 Ç·qia4n ³Ùchi2 Ì¾ta4n ¾öjue2 »Úhui3",
-	"µÚ8¿Î": "¼Æji4 Ëãsua4n Ã°ma4o ÀÀla3n ¹İgua3n ½ôji3n âñpe1ng ÎÕwo4 Èİro2ng ÆÕpu3 ·Üfe4n ²Óca4n ÀÃla4n",
-	"ÓïÎÄÔ°µØ¶ş": "°Øba3i ¼Íji4 ·Äfa3ng Ö¯zhi1 ÓÅyo1u Ê¤she4ng Íåwa1n Á£li4",
-	"Ê¶×Ö3": "Éñshe2n Öİzho1u ´¨chua1n Ó¿yo3ng µºda3o ¸ôge2 Ï¿xia2 Óëyu3 Â½lu4 Ãñmi2n ×åzu2",
-	"µÚ9¿Î": "Çìqi4ng Ï×xia4n ÖÄzhi4 ½àjie2 ×àzo4u Çúqu3 ÒÚyi4",
-	"µÚ10¿Î": "Ñëya1ng Íßwa3 ×¯zhua1ng ÑÏya2n À«kuo4 ±®be1i ÖÜzho1u ËÆsi4 Æ´pi1n °¸a4n Ì³ta2n ¼£ji4 ÏÃsha4",
-	"µÚ11¿Î": "Ñ¶xu4n ´«chua2n Ô¼yue1 ¾Ûju4 »Óhui1 Âàluo2 ºôhu1 »÷ji1 Óµyo1ng ±§ba4o Àále4i Ôóze2 ¿Ëke4 Ñïya2ng",
-	"µÚ12¿Î": "Ê¡she3ng µêdia4n ³÷chu2 Ö¸zhi3 ½Ójie1 ½²jia3ng ÆÌpu1 Ìºta3n Òøyi2n ÕÌzha4ng",
-	"ÓïÎÄÔ°µØÈı": "ÍËtui4 Î£we1i ÏÕxia3n Âòma3i Âôma4i ·´fa3n ÔÓza2 ¼òjia3n µ¥da1n",
-	"Ê¶×Ö4": "´çcu4n Òæyi4 ÕÃzha1ng ±ªba4o ÕÏzha4ng Ì©ta4i Í½tu2 ¹¦go1ng Çşqu2",
-	"µÚ13¿Î": "ÑØya2n ¼Êji4 ĞÅxi4n",
-	"µÚ14¿Î": "ºùhu2 Â«lu2 ÌÙte2ng ÍÛwa1 ¶¢di1ng ÁÚli2n",
-	"µÚ15¿Î": "Ôæza3o Ç³qia3n Íºtu1 ÈÌre3n ßÂbei Ëäsui1 ³Ëche2ng Ë¼si1",
-	"µÚ16¿Î": "³écho1u Ğøxu4 Îüxi1 ¼«ji2 ·òfu1 º¹ha4n Ê»shi3 Ê¾shi4 óİzhe1ng ×Ùzo1ng ÉËsha1ng Ôğze2",
-	"µÚ17¿Î": "Ëásua1n ÆÏpu2 ÌÑta2o ºühu2 Àêli2 ´®chua4n ÆÈpo4 ´ıda4i Ó²yi4ng",
-	"ÓïÎÄÔ°µØËÄ": "²ècha2 Åİpa4o ±¥ba3o ÅÛpa2o ±Şbia1n ÅÚpa4o",
-	"Ê¶×Ö5": "ÒÆyi2 Ä±mo2u ²ñcha2i Ñæya4n Ò×yi4 ÕÛzhe2 ´êcuo1 Éşshe2ng ½ïji1n ¶Àdu2",
-	"µÚ18¿Î": "´Ìci4 â¬we4i °åba3n µÊde4ng ²Úca1o µ«da4n °øba4ng ÒÎyi3 ÇÆqia2o Áôliu2",
-	"µÚ19¿Î": "Êõshu4 Ç¦qia1n ÈÇre3 ÍÂtu3 ×Àzhuo1 ºĞhe2 ×¢zhu4 Ï÷xue1 Öåzho4u",
-	"µÚ20¿Î": "»µhua4i Ôúzha1 ×¥zhua1 İ®me2i ĞÒxi4ng ¸£fu2 ³³cha3o ÊÜsho4u",
-	"µÚ21¿Î": "Ö®zhi1 ÂÖlu2n ÆÚqi1 µÚdi4 ÈÎre4n ¹ßgua4n Ê½shi4 ÃĞmi1 Ö£zhe4ng",
-	"ÓïÎÄÔ°µØÎå": "Ìútie3 ¶¤di4ng È¹qu2n ¿ãku4 °Àa3o ÌÛte2ng Í´to4ng ·èfe1ng",
-	"Ê¶×Ö6": "ºŞhen Ä®mo4 Ì¿ta4n Æ¶pi2n ¸»fu4 ¼¢ji1 Ë÷suo3 ·îfe4ng ÓÀyo3ng",
-	"µÚ22¿Î": "¿Æke1 ÑÇya4 ´ôda1i Ê¼shi3 ²Âca1i Ë©shua1n ¶ºdo4u",
-	"µÚ23¿Î": "Á¼lia2ng Ëõsuo1 Ò£ya2o Ñ°su2n Ê³shi2 Æüqi4 ½¡jia4n ¿µka1ng ²Ùca1o",
-	"µÚ24¿Î": "Ôòze2 ×òzuo2 É´sha1 ÏÛxia4n Ä½mu4 ·Ûfe3n ÁÏlia4o Ì×ta4o ·İfe4n ÃÃme4i ¹ógui4 ¼Äji4 ·Ñfe4i",
-	"µÚ25¿Î": "¿Íke4 ºÎhe2 Ôùze4ng Íôwa1ng ÖÛzho1u Óûyu4 Ì¤ta4 Ì¶ta2n",
-	"ÓïÎÄÔ°µØÁù": "Àúli4 ¹±go4ng ¿Ïke3n ÉÈsha4n È·que4 ³îcho2u",
-	"Ê¶×Ö7": "»¤hu4 ÀÎla2o ¿×ko3ng È¸que4 ½õji3n Ó¥yi1ng ´Ôco2ng ğ¿li2 Áéling2 æÒxi1",
-	"µÚ26¿Î": "ß´ji1 Ôûzha1 Åîpe2ng Ô¾yue4 Àâle2ng ³²cha2o Õ¸zha3n ÅÆpa2i",
-	"µÚ27¿Î": "²àce4 ¾íjua3n ĞÀxi1n ÉÍsha3ng ¹êgui1 ¾µji4ng Ó³yi4ng »Ãhua4n Ñİya3n ½¶jia1o ÈÓre1ng ¿çkua4",
-	"µÚ28¿Î": "Éõshe4n ÖÁzhi4 Õôzhe1ng ËÀsi3 ¼Ìji4 ºõhu1 ß¶da1o",
-	"µÚ29¿Î": "ÃÉme2ng à«na2n Î¶we4i Å¨no2ng ÌÚte2ng ÁÔlie4 Àèli2",
-	"Ê¶×Ö8": "Éäshe4 ÎÀwe4i Ìîtia2n æÏcha2ng ¶ğe2 Óîyu3 Öæzho4u ÔØza3i ¼ıjia4n",
-	"µÚ30¿Î": "¸¡fu2 ±¢ba2o ±©ba4o Ôêza4o ¹àgua4n ¸Èga4i Æ÷qi4 ÑÍya1n »Ùhui3 ÔÖza1i",
-	"µÚ31¿Î": "ßÉgua1 Á¨li3 È¦qua1n ÎÆwe2n Åöpe4ng ·µfa3n",
-	"µÚ32¿Î": "Êæshu1 ±Øbi4 Ğëxu1 °óba3ng Í¨to1ng ±­be1i ËÜsu4 ¿Èha1i ËÔso4u ¹³go1u ¼şjia4n Åçpe1n Éèshe4 Ô¡yu4",
-	"µÚ33¿Î": "²©bo2 Õäzhe1n Ëïsu1n Ï¤xi1 ¾øjue2 Èâro4u Ê·shi3 ºËhe2 È±que1 ·¦fa2 Ï¡xi1",
-	"µÚ34¿Î": "Å©no2ng ¼¼ji4 Ô¬yua2n Â¡lo2ng ½éjie4 ÉÜsha4o Åàpe2i Óıyu4 ²úcha3n Åïpe2ng ¿Øko4ng ÖÆzhi4 Äàni2 ×Âzhuo2"
-};
-var pys = {
-	a: '¨¡¨¢¨£¨¤',
-	o: '¨­¨®¨¯¨°',
-	e: '¨¥¨¦¨§¨¨',
-	i: '¨©¨ª¨«¨¬',
-	u: '¨±¨²¨³¨´',
-	v: '¨µ¨¶¨·¨¸¨¹',
-	g: '¨À'
-};
 
-function setCookie( name, value )
-{
-	var exp = new Date();
-	exp.setTime( exp.getTime() + 30*24*60*60*1000 );
-	document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
-}
-
-function getCookie( name )
-{
-	var arr = document.cookie.match( new RegExp( "(^| )" + name + "=([^;]*)(;|$)" ) );
-	if ( arr != null ) return parseInt( unescape( arr[2] ) );
-	return null;
-}
-
-function makeCard( py, hz )
-{
-	return $('<td class="card"></td>')
-		.append( '<table><tr><td class="py">' + py + '</td></tr><tr><td class="hz">' + hz + '</td></tr></table>' );
-}
-
-function showList( sz, combin, skipTo )
-{
-	// Ã¿ÕÅ A4 Ö½ÄÜ´òÓ¡µÄ×Ö¿¨ÊıÁ¿
-	var num = 12;
-	switch ( sz ) {
-	case 2: num = 8; break;
-	case 3: num = 6; break;
-	}
-
-	var new_courses = { };
-	if ( combin == 1 ) {
-		for ( var course in courses ) {
-			if ( skipTo && course != skipTo ) continue;
-			skipTo = null;
-
-			var chars = courses[ course ];
-			var arr = chars.split( ' ' );
-			if ( arr.length <= num ) {
-				new_courses[ course ] = chars;
-			} else {
-				var part = 1;
-				while ( arr.length > 0 ) {
-					chars = arr.splice( 0, num ).join( ' ' );
-					new_courses[ course + '/' + (part++) ] = chars;
-				}
-			}
-		}
-	} else {
-		var name_buf = [];
-		var char_buf = [];
-
-		for ( var course in courses ) {
-			if ( skipTo && course != skipTo ) continue;
-			skipTo = null;
-
-			var chars = courses[ course ];
-			name_buf.push( course );
-			char_buf = char_buf.concat( chars.split( ' ' ) );
-			var seq = 0;
-			while ( char_buf.length >= num ) {
-				var name = name_buf.join('/');
-				for ( var i = 0; i < seq; i ++ ) {
-					name += '.';
-				}
-				new_courses[ name ] = char_buf.splice( 0, num ).join( ' ' );
-				name_buf = char_buf.length > 0 ? [ course ] : [];
-				seq ++;
-			}
-		}
-
-		if ( char_buf.length > 0 ) {
-			new_courses[ name_buf.join('/') ] = char_buf.join( ' ' );
-		}
-	}
-
-	var divList = $( '#list' ).empty();
-	for ( var course in new_courses ) {
-		var chars = new_courses[ course ];
-		$('<p><a target="_blank" href="?' + encodeURIComponent( chars ) + '">¡¾' + course + '¡¿' + chars + '</a></p>')
-			.appendTo( divList );
-	}
-}
-
-function onLoad()
-{
-	// ¸ù¾İ cookie µÄ¼ÇÂ¼ÉèÖÃÑ¡Ïî
-	var sz = getCookie( 'sz' );
-	if ( sz != 2 && sz != 3 ) sz = 1;
-	var combin = getCookie( 'combin' );
-	if ( combin != 2 ) combin = 1;
-	var bg = getCookie( 'bg' );
-	if ( bg != 2 ) bg = 1;
-	var skipTo = null;
-
-	var qs = window.location.search.substr( 1 );
-	if ( qs.length == 0 ) {
-		// ÉèÖÃ×Ö¿¨³ß´çÑ¡Ïî°´Å¥£¬²¢¼àÌıĞŞ¸Ä²Ù×÷
-		$( '#sz-' + sz ).get(0).checked = true;
-		$( 'input[name=sz]' ).click( function( evt ) {
-			sz = parseInt( evt.currentTarget.value );
-			setCookie( 'sz', sz );
-			showList( sz, combin, skipTo );
-		});
-
-		// ÉèÖÃ×éºÏÄ£Ê½Ñ¡Ïî°´Å¥£¬²¢¼àÌıĞŞ¸Ä²Ù×÷
-		$( '#combin-' + combin ).get(0).checked = true;
-		$( 'input[name=combin]' ).click( function( evt ) {
-			combin = parseInt( evt.currentTarget.value );
-			setCookie( 'combin', combin );
-			showList( sz, combin, skipTo );
-		});
-
-		// ÉèÖÃ¿¨Æ¬¸ñÊ½Ñ¡Ïî°´Å¥£¬²¢¼àÌıĞŞ¸Ä²Ù×÷
-		$( '#bg-' + bg ).get(0).checked = true;
-		$( 'input[name=bg]' ).click( function( evt ) {
-			bg = parseInt( evt.currentTarget.value );
-			setCookie( 'bg', bg );
-		});
-
-		// ÉèÖÃ¡°Ìø¹ı¡±Ñ¡Ïî£¬²¢¼àÌıĞŞ¸Ä²Ù×÷
-		var selSkipTo = $( '#skip-to' );
-		for ( var course in courses ) {
-			$('<option value="' + course + '">' + course + '</option>')
-				.appendTo( selSkipTo );
-			if ( ! skipTo ) {
-				skipTo = course;
-				selSkipTo.val( skipTo );
-			}
-		}
-		selSkipTo.change( function( evt ) {
-			skipTo = selSkipTo.val();
-			showList( sz, combin, skipTo );
-		});
-
-		// ÏÔÊ¾Ê×Ò³µÄÁĞ±í
-		showList( sz, combin, skipTo );
-		return;
-	}
-
-	// Çå¿ÕÒ³Ãæ£¬Éú³ÉÃ¿¸ö×Ö¿¨
-	$( document.body ).empty();
-	qs = decodeURIComponent( qs );
-	var list = qs.split( ' ' );
-	var table = $('<table class="page"></table>').appendTo( document.body );
-	var tr = null;
-	var num = 3; // Ã¿ĞĞÄÜÏÔÊ¾µÄ¿¨Æ¬¸öÊı
-	if ( sz == 2 ) num = 4;
-	for ( var i = 0; i < list.length; i ++ ) {
-		var one = list[i];
-		var py = one.substr( 1 ).replace( /([aoeiuvg])(\d)|(g)/g , function( m, a, t, g ) {
-			if ( g ) return pys[g];
-			return pys[a].charAt( t - 1 );
-		});;
-		var hz = one.substr( 0, 1 );
-
-		if ( i % num == 0 ) {
-			tr = $('<tr></tr>').appendTo( table );
-		}
-		tr.append( makeCard( py, hz ) );
-	}
-
-	// ÉèÖÃ×Ö¿¨³ß´ç
-	switch ( sz ) {
-	case 2:
-		$('.card .py')
-			.height( 40 )
-			.css( 'line-height', '40px' )
-			.css( 'font-size', '36px' );
-		$('.card .hz')
-			.width( 210 )
-			.height( 210 )
-			.css( 'line-height', '190px' )
-			.css( 'font-size', '190px' );
-		break;
-	case 3:
-		$('.card .py')
-			.height( 40 )
-			.css( 'line-height', '40px' )
-			.css( 'font-size', '36px' );
-		$('.card .hz')
-			.width( 270 )
-			.height( 270 )
-			.css( 'line-height', '240px' )
-			.css( 'font-size', '240px' );
-		break;
-	}
-
-	$('.card .hz')
-		.css( 'background-image', bg == 1 ? 'url(bg_2.gif)' : 'url(bg_4.gif)' );
-}
 </script>
 </head>
 <body onload="onLoad()">
 <div class="see-also">
-	ÆäËüÏà¹Ø×ÊÔ´£º
-	<li><a target="_blank" href="http://wenku.baidu.com/view/0438004f767f5acfa1c7cd2a.html">ÈË½Ì°æÒ»Äê¼¶ÉÏ²áÎÒ»áĞ´µÄ×Ö×é´Ê</a></li>
-	<li><a target="_blank" href="http://wenku.baidu.com/view/41d080166edb6f1aff001fe3.html">ÈË½Ì°æÒ»Äê¼¶ÏÂ²áÉú×Ö±í(ÎÒ»áĞ´)×ÖÌû</a></li>
-	<li><a target="_blank" href="write.html">ÈË½Ì°æ¶şÄê¼¶ÓïÎÄÉÏ²á »áĞ´×Ö</a></li>
+	å…¶å®ƒç›¸å…³èµ„æºï¼š
+	<li><a target="_blank" href="http://wenku.baidu.com/view/0438004f767f5acfa1c7cd2a.html">äººæ•™ç‰ˆä¸€å¹´çº§ä¸Šå†Œæˆ‘ä¼šå†™çš„å­—ç»„è¯</a></li>
+	<li><a target="_blank" href="http://wenku.baidu.com/view/41d080166edb6f1aff001fe3.html">äººæ•™ç‰ˆä¸€å¹´çº§ä¸‹å†Œç”Ÿå­—è¡¨(æˆ‘ä¼šå†™)å­—å¸–</a></li>
+	<li><a target="_blank" href="write.html">äººæ•™ç‰ˆäºŒå¹´çº§è¯­æ–‡ä¸Šå†Œ ä¼šå†™å­—</a></li>
 </div>
 
-<p class="desc">Îª»ñµÃ×î¼ÑÏÔÊ¾¡¢´òÓ¡Ğ§¹û£¬½¨ÒéÊ¹ÓÃ Google Chrome ä¯ÀÀÆ÷¡£</p>
-<p class="desc">´òÓ¡Ê±½¨Òé¿ªÆô¡°±³¾°ÑÕÉ«ºÍÍ¼Æ¬¡±Ñ¡Ïî¡£</p>
-<!-- <p class="desc">ÄÚÈİ³ÖĞø¸üĞÂÖĞ¡­¡­</p> -->
-<h1>ÈË½Ì°æ¶şÄê¼¶ÓïÎÄÉÏ²á Ê¶×Ö¿¨Æ¬£¨ÊÊºÏA4Ö½´òÓ¡£©</h1>
-<fieldset><legend>¿¨Æ¬³ß´ç</legend>
-	<input type="radio" id="sz-1" name="sz" value="1" /><label for="sz-1">Ğ¡£¨Êú°æ3¡Á4£©</label>
-	<input type="radio" id="sz-2" name="sz" value="2" /><label for="sz-2">ÖĞ£¨ºá°æ4¡Á2£©</label>
-	<input type="radio" id="sz-3" name="sz" value="3" /><label for="sz-3">´ó£¨ºá°æ3¡Á2£©</label>
+<p class="desc">ä¸ºè·å¾—æœ€ä½³æ˜¾ç¤ºã€æ‰“å°æ•ˆæœï¼Œå»ºè®®ä½¿ç”¨ Google Chrome æµè§ˆå™¨ã€‚</p>
+<p class="desc">æ‰“å°æ—¶å»ºè®®å¼€å¯â€œèƒŒæ™¯é¢œè‰²å’Œå›¾ç‰‡â€é€‰é¡¹ã€‚</p>
+<!-- <p class="desc">å†…å®¹æŒç»­æ›´æ–°ä¸­â€¦â€¦</p> -->
+<h1>è¯†å­—å¡ç‰‡ï¼ˆé€‚åˆA4çº¸æ‰“å°ï¼‰</h1>
+<fieldset><legend>å¡ç‰‡å°ºå¯¸</legend>
+	<input type="radio" id="sz-1" name="sz" value="1" /><label for="sz-1">å°ï¼ˆç«–ç‰ˆ3Ã—4ï¼‰</label>
+	<input type="radio" id="sz-2" name="sz" value="2" /><label for="sz-2">ä¸­ï¼ˆæ¨ªç‰ˆ4Ã—2ï¼‰</label>
+	<input type="radio" id="sz-3" name="sz" value="3" /><label for="sz-3">å¤§ï¼ˆæ¨ªç‰ˆ3Ã—2ï¼‰</label>
 </fieldset>
-<fieldset><legend>×éºÏÄ£Ê½</legend>
-	<input type="radio" id="combin-1" name="combin" value="1" /><label for="combin-1">·Ö¿Î</label>
-	<input type="radio" id="combin-2" name="combin" value="2" /><label for="combin-2">Æ´ºÏ£¨Ê¡Ö½£©</label>
+<fieldset><legend>ç»„åˆæ¨¡å¼</legend>
+	<input type="radio" id="combin-1" name="combin" value="1" /><label for="combin-1">åˆ†è¯¾</label>
+	<input type="radio" id="combin-2" name="combin" value="2" /><label for="combin-2">æ‹¼åˆï¼ˆçœçº¸ï¼‰</label>
 </fieldset>
-<fieldset><legend>¿¨Æ¬¸ñÊ½</legend>
-	<input type="radio" id="bg-1" name="bg" value="1" /><label for="bg-1">Ìï×Ö¸ñ</label>
-	<input type="radio" id="bg-2" name="bg" value="2" /><label for="bg-2">Ã××Ö¸ñ</label>
+<fieldset><legend>å¡ç‰‡æ ¼å¼</legend>
+	<input type="radio" id="bg-1" name="bg" value="1" /><label for="bg-1">ç”°å­—æ ¼</label>
+	<input type="radio" id="bg-2" name="bg" value="2" /><label for="bg-2">ç±³å­—æ ¼</label>
 </fieldset>
 <div id="skip">
-	´Ó
+é€‰æ‹©è‡ªåŠ¨æ ‡æ³¨éŸ³æ ‡æ•°æ®åº“ï¼ˆå¯ä»¥ä»<a href='http://www.unicode.org/Public/zipped/5.2.0/Unihan.zip'>æ­¤å¤„</a>ä¸‹è½½å¹¶è§£å‹å‡ºæ–‡ä»¶ Unihan_Readings.txt è½½å…¥ä½¿ç”¨ï¼‰:
+    <input type="file" id="mapfiles" multiple value="Unihan_Readings.txt">
+</div>
+<div id="skip">
+	è¯¾æœ¬
+	<select id="booksel">
+	</select>
+</div>
+<div id="skip">
+	ä»
 	<select id="skip-to">
 	</select>
-	¿ªÊ¼
+	å¼€å§‹
 </div>
 <div id="list"></div>
 </body>
