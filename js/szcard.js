@@ -231,7 +231,8 @@ console.log ("debug", "end set_hanpymap.");
 		$( 'input[name=sz]' ).click( function( evt ) {
 			sz = parseInt( evt.currentTarget.value );
 			setCookie( 'sz', sz );
-			showList( sz, combin, skipTo );
+			//showList( sz, combin, skipTo );
+			reLoadBook();
 		});
 
 		// 设置组合模式选项按钮，并监听修改操作
@@ -239,7 +240,8 @@ console.log ("debug", "end set_hanpymap.");
 		$( 'input[name=combin]' ).click( function( evt ) {
 			combin = parseInt( evt.currentTarget.value );
 			setCookie( 'combin', combin );
-			showList( sz, combin, skipTo );
+			//showList( sz, combin, skipTo );
+			reLoadBook();
 		});
 
 		// 设置卡片格式选项按钮，并监听修改操作
