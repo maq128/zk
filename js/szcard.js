@@ -323,5 +323,5 @@ console.log ("debug", "end set_hanpymap.");
 	}
 
 	$('.card .hz')
-		.css( 'background-image', bg == 1 ? 'url(bg_2.gif)' : 'url(bg_4.gif)' );
+		.css( 'background-image', bg == 1 ? 'url(img/bg_2.gif)' : 'url(img/bg_4.gif)' );
 }
